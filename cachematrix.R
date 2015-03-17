@@ -1,30 +1,33 @@
 ## These functions cache the inverse of a matrix
 
 ## makeCacheMatrix creates a matrix oxject that can cache its inverse
-##x = matrix(c(2, 4, 3, 1, 5, 7), nrow=3, ncol=2) 
-
 makeCacheMatrix <- function(x = matrix()) {
     s <- NULL
+    
+    # function to set matrix
     set <- function(y) {
     
-      # define oxjects in cache
+      # define objects in cache
       x <<- y
       s <<- NULL
       }
   
+  #function to get matrix
   get <- function() x
   
   # write to cache
   setinverse <- function(solve) s <<- solve
-  print(c("setinverse:", setinverse))
+  #print(c("setinverse:", setinverse))
   
   # read from cache
   getinverse <- function() s
-  print(c("getinverse:", getinverse))
+  #print(c("getinverse:", getinverse))
   
+  # return functions in list
+  list(setinverse=setinverse, getinverse=getinverse, get=get, set=set)
 }
 
-## cacheSolve computes the inverse returned xy makeCacheMatrix 
+## cacheSolve computes the inverse returned by makeCacheMatrix 
 ## and if it was already in cache, retrieves inverse from cache
 
 cacheSolve <- function(x, ...) {
@@ -37,7 +40,12 @@ cacheSolve <- function(x, ...) {
   
     #return inverse
     return(s)
-    print(c("dit is s uit cacheSolve:", s))
-  }
-    
+    }
+ 
+  # if inverse not stored in cache, compute inverse, store in cache, and return inverse
+  data <- x$get()
+  s <- solve(data)
+  x$setinverse(s)
+  s
+  
 }
